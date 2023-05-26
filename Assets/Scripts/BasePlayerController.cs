@@ -6,23 +6,30 @@ namespace Runner
     [RequireComponent(typeof(Rigidbody), typeof(PlayerStatsComponent))]
     public abstract class BasePlayerController : MonoBehaviour
     {
+        protected Rigidbody rigidbody;
+        protected PlayerStatsComponent playerStatsComponent;
+        
         protected virtual void Start()
         {
-            StartCoroutine(MoveForward());
+            rigidbody = GetComponent<Rigidbody>();
+            playerStatsComponent = GetComponent<PlayerStatsComponent>();
+        }
+        
+        protected virtual void Update()
+        {
+            MoveForward();
         }
 
         protected void Jump()
         {
-            GetComponent<Rigidbody>().AddForce(transform.up * GetComponent<PlayerStatsComponent>().JumpForce, ForceMode.Impulse);
+            float jumpForce = playerStatsComponent.JumpForce;
+            rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
-        private IEnumerator MoveForward()
+        private void MoveForward()
         {
-            while(true)
-            {
-                transform.position += transform.forward * GetComponent<PlayerStatsComponent>().ForwardSpeed * Time.deltaTime;
-                yield return null;
-			}
-		}
+            float forwardSpeed = playerStatsComponent.ForwardSpeed;
+            transform.position += transform.forward * forwardSpeed * Time.deltaTime;
+        }
     }
 }

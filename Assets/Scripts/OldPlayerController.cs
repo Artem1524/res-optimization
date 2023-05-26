@@ -13,10 +13,10 @@ namespace Runner
         {
             if (Input.GetKeyDown(KeyCode.Space)) Jump();
 
-            var direction = Input.GetAxis("Horizontal") * GetComponent<PlayerStatsComponent>().SideSpeed * Time.fixedDeltaTime;
+            var direction = Input.GetAxis("Horizontal") * playerStatsComponent.SideSpeed * Time.fixedDeltaTime;
 
             if (direction == 0f) return;
-            GetComponent<Rigidbody>().velocity += direction * transform.right;
+            rigidbody.velocity += direction * transform.right;
         }
 	}
 }

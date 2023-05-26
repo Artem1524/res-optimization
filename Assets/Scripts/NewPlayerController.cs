@@ -8,15 +8,23 @@ namespace Runner
 
 		protected override void Start()
         {
-			base.Start();
+		    base.Start();
 		}
 
-		private void Update()
+		protected override void Update()
 		{
-			var direction = _controls.Player.Move.ReadValue<float>() * GetComponent<PlayerStatsComponent>().SideSpeed * Time.deltaTime;
-
-			if (direction == 0f) return;
-			transform.position += direction * transform.right;
+		    base.Update();
+		    
+		    SideMove();
+		}
+		
+		private void SideMove()
+		{
+		    var direction = _controls.Player.Move.ReadValue<float>();
+		    
+		    if (direction == 0f) return;
+		    
+		    transform.position += direction * playerStatsComponent.SideSpeed * transform.right * Time.deltaTime;
 		}
 
 

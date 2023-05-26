@@ -10,7 +10,6 @@ namespace Runner
         private float _step = 6f;
         private int _currentIndex = 0;
         private float _lastZ = 30f;
-        private int _levelsLength = 1024 * 1024;
 
         [SerializeField, Range(1, 100), Tooltip("Это здоровье игрока, не перепутай")]
         private int Health = 3;
@@ -23,8 +22,6 @@ namespace Runner
 
 
         public static GameManager Self { get; private set; }
-
-
 
         void Awake()
         {
@@ -52,22 +49,33 @@ namespace Runner
 
         public void UpdateLevel()
         {
-            _progress++;
-            _text.text = _progress.ToString();
-
             _lastZ += _step;
-            for(int i = 0; i < _levelsLength; i++)
-            {
-                var position = _levels[_currentIndex].position;
+            
+            MoveCurrentBlockToLast(_currentIndex);
+            IncreaseCurrentBlockIndex();
+            
+            _progress++;
+            UpdateUI(_progress);
+	    }
+	    
+	    private void MoveCurrentBlockToLast(int currentBlockIndex)
+	    {
+	        var position = _levels[currentBlockIndex].position;
                 position.z = _lastZ;
-                _levels[_currentIndex].position = position;
-            }
-
-            _currentIndex++;
-            if (_currentIndex >= _levels.Length)
-            {
-                _currentIndex = 0;
-            }
+                _levels[currentBlockIndex].position = position;
+	    }
+	    
+	    private void IncreaseCurrentBlockIndex()
+	    {
+	        _currentIndex++;
+            
+                if (_currentIndex >= _levels.Length)
+                    _currentIndex = 0;
+	    }
+	    
+	    private void UpdateUI(int completedLevelsCount)
+	    {
+	        _text.text = completedLevelsCount.ToString();
 	    }
     }
 }
